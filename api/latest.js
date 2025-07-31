@@ -1,7 +1,13 @@
-// /api/latest.js
-
-import { latestO2 } from './log';
+import fs from 'fs';
+import path from 'path';
 
 export default function handler(req, res) {
-  res.status(200).json({ o2: latestO2 });
+  const filePath = path.join(process.cwd(), 'latest.json');
+
+  if (fs.existsSync(filePath)) {
+    const data = fs.readFileSync(filePath);
+    res.status(200).json(JSON.parse(data));
+  } else {
+    res.status(200).json({ o2: 0 });
+  }
 }
